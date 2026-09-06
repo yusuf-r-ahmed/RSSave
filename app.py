@@ -1,11 +1,7 @@
 from flask import Flask, render_template, request, redirect
 import sqlite3
 import feedparser
-
-def connect_db():
-    dbcon = sqlite3.connect("rss.db")
-    dbcon.row_factory = sqlite3.Row #allows acessing by name not just index
-    return dbcon
+from db import connect_db
 
 app = Flask(__name__)
 
