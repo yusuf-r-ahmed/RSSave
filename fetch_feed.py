@@ -54,18 +54,22 @@ def save_feed_and_entries(template_id, feed_url):
         cursor.execute("INSERT OR IGNORE INTO entries (feed_id, title, link, published) VALUES (?, ?, ?, ?)",(feed_id, title, link, published))
 
         entry_id = cursor.lastrowid #gives new entry id 0 if duplicate
+
         if entry_id:
             new_entries_count += 1
-
             for header in target_headers:
-                raw_value = item.get(header, "")
+                # convert ':' -> '_'
+                normalized_key = header.strip().lower().replace(":", "_")
+
+                # Check exact header name, fallback to normalized key
+                raw_value = item.get(header) or item.get(normalized_key, "")
 
                 # handle media audio/video links if header is 'enclosures'
                 if header == "enclosures" and item.get("enclosures"):
                     raw_value = item.enclosures[0].get("href", "")
-                
+
                 cursor.execute(
-                    """INSERT INTO entry_headers (entry_id, header_name, header_value) 
+                    """INSERT INTO entry_headers (entry_id, header_name, header_value)
                        VALUES (?, ?, ?)""",
                     (entry_id, header, str(raw_value))
                 )
