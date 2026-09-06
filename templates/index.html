@@ -3,14 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>RSSave - Templates</title>
-    <style>
-        body { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; }
-        form { background: #f4f4f4; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
-        input[type="text"] { width: 100%; padding: 8px; margin: 8px 0 16px; box-sizing: border-box; }
-        button { background: #0066cc; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; }
-        ul { list-style-type: none; padding: 0; }
-        li { border-bottom: 1px solid #ddd; padding: 10px 0; }
-    </style>
 </head>
 <body>
 
@@ -37,6 +29,18 @@
                 <strong>{{ template['name'] }}</strong><br>
                 <small>Headers: <code>{{ template['headers'] }}</code></small>
             </li>
+        {% endfor %}
+    </ul>
+    <h2>Subscribed Feeds</h2>
+
+    <ul>
+        {% for feed in feeds %}
+            <li>
+                <a href="/feed/{{ feed['id'] }}"><strong>{{ feed['title'] }}</strong></a>
+                <small>({{ feed['template_name'] }})</small>
+            </li>
+        {% else %}
+            <li>No feeds subscribed yet.</li>
         {% endfor %}
     </ul>
 

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ feed['title'] }}</title>
+</head>
+<body>
+
+    <header>
+        <a href="/" class="back-link">&larr; Back to Dashboard</a>
+        <h1>{{ feed['title'] }}</h1>
+        <p>
+            <strong>Template:</strong> <span class="badge">{{ template['name'] }}</span> | 
+            <small><a href="{{ feed['url'] }}" target="_blank" style="color: #666;">Source URL</a></small>
+        </p>
+    </header>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Published</th>
+                <!--generate table column headers dyn-->
+                {% for header in target_headers %}
+                    <th>{{ header }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in entries %}
+                <tr>
+                    <td>
+                        <a href="{{ entry.link }}" class="entry-title" target="_blank">{{ entry.title }}</a>
+                    </td>
+                    <td class="date">{{ entry.published }}</td>
+                    
+                    <!--match headers for each row -->
+                    {% for header in target_headers %}
+                        <td>{{ entry.headers.get(header, '—') }}</td>
+                    {% endfor %}
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="{{ 2 + target_headers|length }}" style="text-align: center; color: #777;">
+                        No entries found for this feed.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>
