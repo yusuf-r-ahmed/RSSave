@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RSSave</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 0 20px; }
+        form { background: #f4f4f4; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
+        input[type="text"] { width: 100%; padding: 8px; margin: 8px 0 16px; box-sizing: border-box; }
+        button { background: #0066cc; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; }
+        ul { list-style-type: none; padding: 0; }
+        li { border-bottom: 1px solid #ddd; padding: 10px 0; }
+    </style>
+</head>
+<body>
+
+    <h1>Feed Templates</h1>
+
+    <!-- Posts data to / -->
+    <form action="/" method="POST">
+        <h3>Create New Template</h3>
+        
+        <label for="name">Template Name:</label>
+        <input type="text" id="name" name="name" placeholder="e.g. BBC News" required>
+
+        <label for="headers">Custom Headers to Track (comma-separated):</label>
+        <input type="text" id="headers" name="headers" placeholder="e.g. title, summary, link" required>
+
+        <button type="submit">Save Template</button>
+    </form>
+
+    <h2>Saved Templates</h2>
+    <ul>
+       <!-- jinja2 -->
+        {% for template in templates %}
+            <li>
+                <strong>{{ template['name'] }}</strong><br>
+                <small>Headers: <code>{{ template['headers'] }}</code></small>
+            </li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
