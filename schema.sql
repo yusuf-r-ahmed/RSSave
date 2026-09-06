@@ -1,8 +1,32 @@
+PRAGMA foreign_keys = ON;
+
 CREATE TABLE IF NOT EXISTS feed_templates (
-    id  INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     headers TEXT NOT NULL
 );
 
-INSERT INTO feed_templates (name, headers) 
-VALUES ('Test', '1,2,3');
+CREATE TABLE IF NOT EXISTS feeds (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    template_id INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    url TEXT UNIQUE NOT NULL,
+    FOREIGN KEY (template_id) REFERENCES feed_templates(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS entries (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    feed_id INTEGER NOT NULL,
+    title TEXT NOT NULL,
+    link TEXT UNIQUE NOT NULL,
+    published TEXT,
+    FOREIGN KEY (feed_id) REFERENCES feeds(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS entry_headers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    entry_id INTEGER NOT NULL,
+    header_name TEXT NOT NULL,
+    header_value TEXT,
+    FOREIGN KEY (entry_id) REFERENCES entries(id) ON DELETE CASCADE
+);
