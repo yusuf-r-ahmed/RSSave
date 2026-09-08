@@ -56,10 +56,20 @@
                 <option value="{{ template['id'] }}">{{ template['name'] }} ({{ template['headers'] }})</option>
             {% endfor %}
         </select>
-
+        <!-- flash Messages -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li><strong>Error:</strong> {{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
         <label for="feed_url">RSS Feed URL:</label>
         <input type="text" id="feed_url" name="feed_url" placeholder="https://example.com/rss.xml" required>
         <button type="submit">Track and Fetch</button>
     </form>
+
 </body>
 </html>

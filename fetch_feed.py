@@ -11,7 +11,7 @@ def save_feed_and_entries(template_id, feed_url):
     if not template:
         print(f"Error: Template with ID {template_id} does not exist.")
         dbcon.close()
-        return
+        return False, "Selected template does not exist."
     
     target_headers = []
     for header in template["headers"].split(","):
@@ -26,7 +26,7 @@ def save_feed_and_entries(template_id, feed_url):
     if not parsed.entries:
         print("Warning: No entries found or invalid RSS URL.")
         dbcon.close()
-        return
+        return False, "Could not find any entries at that URL. Check the link and try again."
 
     feed_title = parsed.feed.get("title", "Untitled Feed")
 
@@ -77,6 +77,7 @@ def save_feed_and_entries(template_id, feed_url):
     dbcon.commit()
     dbcon.close()
     print(f"Saved feed '{feed_title}' with {new_entries_count} new entries.")
+    return True, feed_id
 
 
 if __name__ == "__main__":
