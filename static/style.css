@@ -1,0 +1,196 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #040807;
+  color: #e5f5ee;
+  max-width: 860px;
+  margin: 36px auto;
+  padding: 0 20px;
+  line-height: 1.6;
+}
+
+/* Headings */
+h1, h2, h3 {
+  color: #b0e4cc;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 1.8rem;
+  border-bottom: 2px solid #285a48;
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+}
+
+h2 {
+  font-size: 1.3rem;
+  margin-top: 32px;
+  margin-bottom: 12px;
+}
+
+h3 {
+  font-size: 1.05rem;
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+/* Links */
+a {
+  color: #b0e4cc;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: #ffffff;
+}
+
+/* Form Container Cards */
+form {
+  background-color: #0c1815;
+  border: 1px solid #1c3d32;
+  padding: 20px;
+  margin-bottom: 24px;
+  border-radius: 6px;
+}
+
+/* Labels & Form Text */
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 10px;
+  margin-bottom: 6px;
+  color: #ffffff;
+}
+
+/* Inputs & Dropdowns */
+input[type="text"], select {
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+  background-color: #020504;
+  color: #ffffff;
+  border: 1px solid #285a48;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+input[type="text"]::placeholder {
+  color: #5c8877;
+}
+
+input[type="text"]:focus, select:focus {
+  outline: none;
+  border-color: #b0e4cc;
+  box-shadow: 0 0 0 2px rgba(176, 228, 204, 0.15);
+}
+
+/* Primary Action Buttons */
+button {
+  background-color: #285a48;
+  color: #ffffff;
+  font-weight: 600;
+  border: 1px solid #408a71;
+  padding: 9px 18px;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+button:hover {
+  background-color: #408a71;
+  border-color: #b0e4cc;
+}
+
+/* Inline wrappers for buttons next to headings / inside lists */
+form[action^="/delete"],
+form[action="/refresh-all"] {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: inline;
+}
+
+/* Delete Button */
+form[action^="/delete"] button {
+  background-color: #240e11;
+  color: #ff9aa2;
+  border: 1px solid #6b242c;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: 4px;
+}
+
+form[action^="/delete"] button:hover {
+  background-color: #6b242c;
+  color: #ffffff;
+}
+
+/* Lists */
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px 0;
+}
+
+ul li {
+  background-color: #0c1815;
+  border: 1px solid #1c3d32;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  color: #a8d5c2;
+}
+
+ul li strong {
+  color: #ffffff;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 18px;
+  background-color: #0c1815;
+}
+
+th, td {
+  border: 1px solid #1c3d32;
+  padding: 10px 14px;
+  text-align:left;
+}
+
+th {
+  background-color: #142822;
+  color: #b0e4cc;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+tr:hover {
+  background-color: #12211d;
+}
+
+/* Badges & Dates */
+.badge {
+  background-color: #142822;
+  color: #b0e4cc;
+  border: 1px solid #285a48;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.date {
+  color: #79a896;
+  font-size: 13px;
+  white-space: nowrap;
+}
