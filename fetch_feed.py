@@ -1,7 +1,41 @@
 import sqlite3
 import feedparser
 from db import connect_db
+import json
+import os
+import urllib.request
+from dotenv import load_dotenv
 
+load_dotenv()
+
+
+def send_discord_alert(feed_title, entry_title, entry_link, published):
+  webhook_url = os.getenv("DISCORD_WEBHOOK_URL")
+  if not webhook_url:
+    return
+
+  payload = {
+      "embeds": [{
+          "title": entry_title,
+          "url": entry_link,
+          "description": f"New post from **{feed_title}**",
+          "footer": {"text": published if published else "Recently published"},
+      }]
+  }
+
+  req = urllib.request.Request(
+      webhook_url,
+      data=json.dumps(payload).encode("utf-8"),
+      headers={
+          "Content-Type": "application/json",
+          "User-Agent": "Flask-RSS-App",
+      },
+  )
+
+  try:
+    urllib.request.urlopen(req)
+  except Exception as e:
+    print(f"[Discord Webhook Error] {e}")
 
 def save_feed_and_entries(template_id, feed_url):
   dbcon = connect_db()
@@ -63,6 +97,9 @@ def save_feed_and_entries(template_id, feed_url):
     if cursor.rowcount > 0:
       entry_id = cursor.lastrowid
       new_entries_count += 1
+
+      #discord webhook
+      send_discord_alert(feed_title, title, link, published)  
 
       for header in target_headers:
         # convert ':' -> '_'
