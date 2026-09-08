@@ -179,4 +179,6 @@ def refresh_all():
   return redirect("/")
 
 if __name__ == "__main__":
-    app.run(debug=True)
+  port = int(os.getenv("PORT", 5000))
+  debug = os.getenv("FLASK_DEBUG", "False").lower() in ("true", "1", "t")
+  app.run(port=port, debug=debug)
