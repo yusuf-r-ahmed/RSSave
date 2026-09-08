@@ -110,8 +110,24 @@ def add_feed():
 
     # 'result' contains the feed_id on success
     return redirect(f"/feed/{result}")
-    
 
+#feed deleter
+@app.route("/delete-feed/<int:feed_id>", methods=["POST"])
+def delete_feed(feed_id):
+  dbcon = connect_db()
+  dbcon.execute("DELETE FROM feeds WHERE id = ?", (feed_id,))
+  dbcon.commit()
+  dbcon.close()
+  return redirect("/")
+
+#template deleter
+@app.route("/delete-template/<int:template_id>", methods=["POST"])
+def delete_template(template_id):
+  dbcon = connect_db()
+  dbcon.execute("DELETE FROM feed_templates WHERE id = ?", (template_id,))
+  dbcon.commit()
+  dbcon.close()
+  return redirect("/")
 
 if __name__ == "__main__":
     app.run(debug=True)
