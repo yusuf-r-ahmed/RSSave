@@ -7,7 +7,7 @@
 </head>
 <body>
 
-    <h1>Feed Templates</h1>
+    <h1>RSSave</h1>
 
     <!-- posts data to python / -->
     <form action="/" method="POST">
@@ -35,13 +35,13 @@
             </li>
         {% endfor %}
     </ul>
-    <div style="display: flex; align-items: center; gap: 15px;">
-        <h2>Subscribed Feeds</h2>
+    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 16px;">
+        <h2 style="margin: 0;">Subscribed feeds</h2>
         <form action="/refresh-all" method="POST" style="display: inline;">
             <button type="submit">Fetch All Feeds</button>
         </form>
     </div>
-    <h2>Subscribed Feeds</h2>
+    
     <ul>
         {% for feed in feeds %}
             <li>

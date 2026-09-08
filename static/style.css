@@ -4,10 +4,16 @@ body {
   font-family: 'Roboto', sans-serif;
   background-color: #040807;
   color: #e5f5ee;
-  max-width: 860px;
+  max-width: 860px; 
+  width: 95%;       
   margin: 36px auto;
   padding: 0 20px;
   line-height: 1.6;
+}
+
+body.wide-view {
+  max-width: 1400px;
+  width: 95%;
 }
 
 /* Headings */
