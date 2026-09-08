@@ -84,3 +84,8 @@ In the dashboard you can manually refetch and update your database with the curr
 
 * `syncfeed.py` will update all tracked RSS feeds and send out discord alerts even if the web app isn't running. You can use an OS scheduler such as a `cron` for linux or `schtasks` for windows to keep your feeds always up to date automatically without need to manually update it.
 
+* To run the app for a more production setting use waitress
+  ```bash
+  pip install waitress
+  waitress-serve --port=5000 app:app
+  ```
