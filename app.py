@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect
 import sqlite3
 import feedparser
 from db import connect_db
+from fetch_feed import save_feed_and_entries
 
 app = Flask(__name__)
 
@@ -84,6 +85,25 @@ def view_feed(feed_id):
 
     return render_template("feed.html",feed=feed,template=template,target_headers=target_headers,entries=entries_data)
 
+@app.route("/add-feed", methods=["POST"])
+def add_feed():
+    #user inputs the template ID they want to use + the feed they want to track.
+    template_id = int(request.form["template_id"])
+    feed_url = request.form["feed_url"].strip()
+
+    #calls the fetching function for that url
+    save_feed_and_entries(template_id, feed_url)
+
+    #connects to the database to get the id number to direct the user to the right feed
+    dbcon = connect_db()
+    feed = dbcon.execute("SELECT id FROM feeds WHERE url = ?", (feed_url,)).fetchone()
+    dbcon.close()
+
+    
+    #directs them if feed worked
+    if feed:
+        return redirect(f"/feed/{feed['id']}")
+    return redirect("/")
 
 
 if __name__ == "__main__":

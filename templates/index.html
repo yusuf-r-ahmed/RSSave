@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>RSSave - Templates</title>
+    <title>RSSave</title>
 </head>
 <body>
 
     <h1>Feed Templates</h1>
 
-    <!-- Posts data to / -->
+    <!-- posts data to python / -->
     <form action="/" method="POST">
         <h3>Create New Template</h3>
         
@@ -44,5 +44,22 @@
         {% endfor %}
     </ul>
 
+    <!-- rss feed adding form -->
+    <form action="/add-feed" method="POST">
+        <h3>Subscribe to a Feed</h3>
+
+        <label for="template_id">Choose Template:</label>
+
+        <!-- created dropdown so user won't need to bother with ID -->
+        <select id="template_id" name="template_id" required style="width: 100%; padding: 8px; margin: 8px 0 16px; box-sizing: border-box;">
+            {% for template in templates %}
+                <option value="{{ template['id'] }}">{{ template['name'] }} ({{ template['headers'] }})</option>
+            {% endfor %}
+        </select>
+
+        <label for="feed_url">RSS Feed URL:</label>
+        <input type="text" id="feed_url" name="feed_url" placeholder="https://example.com/rss.xml" required>
+        <button type="submit">Track and Fetch</button>
+    </form>
 </body>
 </html>

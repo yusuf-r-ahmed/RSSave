@@ -80,4 +80,4 @@ def save_feed_and_entries(template_id, feed_url):
 
 
 if __name__ == "__main__":
-    save_feed_and_entries(template_id=1,feed_url="https://letterboxd.com/(placeholder)/rss/")
+    save_feed_and_entries(template_id=1,feed_url="")
