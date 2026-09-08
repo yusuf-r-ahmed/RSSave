@@ -5,6 +5,8 @@ from db import connect_db
 from fetch_feed import save_feed_and_entries
 import os
 from dotenv import load_dotenv
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 
 load_dotenv()
 
@@ -44,52 +46,79 @@ def home():
 
 @app.route("/feed/<int:feed_id>")
 def view_feed(feed_id):
-    dbcon = connect_db()
+  dbcon = connect_db()
 
-    #fetch feed and teplate def
-    feed = dbcon.execute("SELECT * FROM feeds WHERE id = ?", (feed_id,)).fetchone()
-    if not feed:
-        dbcon.close()
-        return "Feed not found", 404
+  # fetch feed and teplate def
+  feed = dbcon.execute(
+      "SELECT * FROM feeds WHERE id = ?", (feed_id,)
+  ).fetchone()
+  if not feed:
+    dbcon.close()
+    return "Feed not found", 404
 
-    template = dbcon.execute("SELECT * FROM feed_templates WHERE id = ?", (feed["template_id"],)).fetchone()
+  template = dbcon.execute(
+      "SELECT * FROM feed_templates WHERE id = ?", (feed["template_id"],)
+  ).fetchone()
 
-    target_headers = []
-    for header in template["headers"].split(","):
-        cleaned = header.strip()
-        if cleaned:
-            target_headers.append(cleaned)
+  target_headers = []
+  for header in template["headers"].split(","):
+    cleaned = header.strip()
+    if cleaned:
+      target_headers.append(cleaned)
 
-    # fetch base entries
-    entries = dbcon.execute( "SELECT * FROM entries WHERE feed_id = ? ORDER BY id ASC", (feed_id,)).fetchall()
+  # fetch base entries
+  entries = dbcon.execute(
+      "SELECT * FROM entries WHERE feed_id = ?", (feed_id,)
+  ).fetchall()
 
-    # fetch all custom headers belonging to these entries
-    header_rows = dbcon.execute(
-        """
+  # fetch all custom headers belonging to these entries
+  header_rows = dbcon.execute(
+      """
         SELECT eh.entry_id, eh.header_name, eh.header_value
         FROM entry_headers eh
         JOIN entries e ON eh.entry_id = e.id
         WHERE e.feed_id = ?
-        """,(feed_id,), ).fetchall()
-    dbcon.close()
+        """,
+      (feed_id,),
+  ).fetchall()
+  dbcon.close()
 
-    # map headers by entry_id:
-    headers_by_entry = {}
-    for row in header_rows:
-        headers_by_entry.setdefault(row["entry_id"], {})[row["header_name"]] = row["header_value"]
+  # map headers by entry_id:
+  headers_by_entry = {}
+  for row in header_rows:
+    headers_by_entry.setdefault(row["entry_id"], {})[row["header_name"]] = row[
+        "header_value"
+    ]
 
-    #entries with targheader
-    entries_data = []
-    for entry in entries:
-        entries_data.append({
-            "id": entry["id"],
-            "title": entry["title"],
-            "link": entry["link"],
-            "published": entry["published"],
-            "headers": headers_by_entry.get(entry["id"], {})
-        })
+  # entries with targheader
+  entries_data = []
+  for entry in entries:
+    entries_data.append({
+        "id": entry["id"],
+        "title": entry["title"],
+        "link": entry["link"],
+        "published": entry["published"],
+        "headers": headers_by_entry.get(entry["id"], {}),
+    })
 
-    return render_template("feed.html",feed=feed,template=template,target_headers=target_headers,entries=entries_data)
+  # sort newest first by date
+  def get_entry_date(item):
+    if item["published"]:
+      try:
+        return parsedate_to_datetime(item["published"])
+      except Exception:
+        pass
+    return datetime.min.replace(tzinfo=timezone.utc)
+
+  entries_data.sort(key=get_entry_date, reverse=True)
+
+  return render_template(
+      "feed.html",
+      feed=feed,
+      template=template,
+      target_headers=target_headers,
+      entries=entries_data
+  )
 
 @app.route("/add-feed", methods=["POST"])
 def add_feed():
