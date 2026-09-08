@@ -34,7 +34,12 @@
             </li>
         {% endfor %}
     </ul>
-
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <h2>Subscribed Feeds</h2>
+        <form action="/refresh-all" method="POST" style="display: inline;">
+            <button type="submit">Fetch All Feeds</button>
+        </form>
+    </div>
     <h2>Subscribed Feeds</h2>
     <ul>
         {% for feed in feeds %}
@@ -63,11 +68,11 @@
             {% endfor %}
         </select>
         <!-- flash Messages -->
-        {% with messages = get_flashed_messages() %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <ul>
-                    {% for message in messages %}
-                        <li><strong>Error:</strong> {{ message }}</li>
+                    {% for category, message in messages %}
+                        <li><strong>{{ category|capitalize }}:</strong> {{ message }}</li>
                     {% endfor %}
                 </ul>
             {% endif %}

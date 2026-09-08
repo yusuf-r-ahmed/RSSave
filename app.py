@@ -98,14 +98,14 @@ def add_feed():
     feed_url = request.form["feed_url"].strip()
 
     if not feed_url.startswith(("http://", "https://")):
-        flash("Please provide a valid URL starting with http:// or https://")
+        flash("Please provide a valid URL starting with http:// or https://", "error")
         return redirect("/")
     
     #calls the fetching function for that url
     success, result = save_feed_and_entries(int(template_id), feed_url)
 
     if not success:
-        flash(result)  # displays the error message returned from fetch_feed.py
+        flash(result, "error")  # displays the error message returned from fetch_feed.py
         return redirect("/")
 
     # 'result' contains the feed_id on success
@@ -127,6 +127,26 @@ def delete_template(template_id):
   dbcon.execute("DELETE FROM feed_templates WHERE id = ?", (template_id,))
   dbcon.commit()
   dbcon.close()
+  return redirect("/")
+
+#refresher
+@app.route("/refresh-all", methods=["POST"])
+def refresh_all():
+  dbcon = connect_db()
+  feeds = dbcon.execute("SELECT template_id, url, title FROM feeds").fetchall()
+  dbcon.close()
+
+  if not feeds:
+    flash("No feeds to refresh.")
+    return redirect("/")
+
+  refreshed_count = 0
+  for feed in feeds:
+    success, _ = save_feed_and_entries(feed["template_id"], feed["url"])
+    if success:
+      refreshed_count += 1
+
+  flash(f"Successfully refreshed {refreshed_count} feed(s)!", "success")
   return redirect("/")
 
 if __name__ == "__main__":
